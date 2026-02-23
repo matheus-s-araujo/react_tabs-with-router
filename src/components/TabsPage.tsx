@@ -1,20 +1,28 @@
 import classNames from 'classnames';
 import { Link, useParams } from 'react-router-dom';
+import { Tab } from '../types/Tab';
+import { useEffect } from 'react';
 
-// type TabsProps = {
-//   id: string,
-//   title: string,
-//   content: string,
-// }
+type TabsPageProps = {
+  tabs: Tab[];
+  selectedTabId: Tab | null;
+  onTabSelected: (tab: Tab | null) => void;
+};
 
-const tabs = [
-  { id: 'tab-1', title: 'Tab 1', content: 'Some text 1' },
-  { id: 'tab-2', title: 'Tab 2', content: 'Some text 2' },
-  { id: 'tab-3', title: 'Tab 3', content: 'Some text 3' },
-];
-
-export const TabsPage = () => {
+export const TabsPage = ({
+  tabs,
+  selectedTabId,
+  onTabSelected,
+}: TabsPageProps) => {
   const { tabId } = useParams();
+
+  useEffect(() => {
+    if (tabId) {
+      const tabFound = tabs.find(tab => tab.id === tabId) ?? null;
+
+      onTabSelected(tabFound);
+    }
+  }, [tabId]);
 
   return (
     <>
@@ -24,10 +32,12 @@ export const TabsPage = () => {
           {tabs.map(tab => (
             <li
               data-cy="Tab"
-              className={classNames({ 'is-active': tabId === tab.id })}
+              className={classNames({
+                'is-active': selectedTabId?.id === tab.id,
+              })}
               key={tab.id}
             >
-              <Link to={`/tabs/${tab.id}`}>Tab {tab.id.slice(4, 5)}</Link>
+              <Link to={`/tabs/${tab.id}`}>{tab.title}</Link>
             </li>
           ))}
         </ul>
@@ -35,7 +45,7 @@ export const TabsPage = () => {
 
       {tabId && tabs.find(tab => tab.id === tabId) ? (
         <div className="block" data-cy="TabContent">
-          {`Some text ${tabId.slice(4, 5)}`}
+          {selectedTabId?.content}
         </div>
       ) : (
         <div className="block" data-cy="TabContent">
