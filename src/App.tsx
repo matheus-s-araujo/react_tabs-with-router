@@ -42,31 +42,33 @@ export const App = () => {
       <div className="section">
         <div className="container">
           <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/home" element={<Navigate to="/" replace={true} />} />
-            <Route path="/tabs">
-              <Route
-                index
-                element={
-                  <TabsPage
-                    tabs={tabs}
-                    selectedTabId={selectedTabId}
-                    onTabSelected={setSelectedTabId}
-                  />
-                }
-              />
-              <Route
-                path=":tabId"
-                element={
-                  <TabsPage
-                    tabs={tabs}
-                    selectedTabId={selectedTabId}
-                    onTabSelected={setSelectedTabId}
-                  />
-                }
-              />
+            <Route path="/">
+              <Route index element={<HomePage />} />
+              <Route path="home" element={<Navigate to="/" replace={true} />} />
+              <Route path="tabs">
+                <Route
+                  index
+                  element={
+                    <TabsPage
+                      tabs={tabs}
+                      selectedTabId={selectedTabId}
+                      onTabSelected={setSelectedTabId}
+                    />
+                  }
+                />
+                <Route
+                  path=":tabId"
+                  element={
+                    <TabsPage
+                      tabs={tabs}
+                      selectedTabId={selectedTabId}
+                      onTabSelected={setSelectedTabId}
+                    />
+                  }
+                />
+              </Route>
+              <Route path="*" element={<NotFoundPage />} />
             </Route>
-            <Route path="/*" element={<NotFoundPage />} />
           </Routes>
         </div>
       </div>
